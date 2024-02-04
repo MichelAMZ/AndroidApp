@@ -41,37 +41,50 @@ class MainActivity : AppCompatActivity() {
         tvCityName = findViewById(R.id.textViewCity)
         layoutWeather = findViewById(R.id.linearLayoutWeather)
 
+        btnSearch.setOnClickListener{
+            val city = editCityText.text.toString()
+            if (city.isEmpty()){
+                Toast.makeText(this, "City's nam can't be empty !", Toast.LENGTH_SHORT).show()
+            }else{
+                getWeatherByCity(city)
+            }
+        }
+    }
+
+    private fun getWeatherByCity(cityName: String) {
+
         // TODO1 : create retrofit instance
         val retrofit = Retrofit.Builder().baseUrl("https://api.openweathermap.org/data/2.5/weather/")
             .addConverterFactory(GsonConverterFactory.create())
-                                         .build()
+            .build()
 
         val weatherService = retrofit.create(WeatherService::class.java)
         try {
             // TODO2: call weather api
-            val result = weatherService.getWeatherByCity()
-            result.enqueue(object : Callback<JsonObject>{
-                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+            val result = weatherService.getWeatherByCity(cityName)
+            result.enqueue(object : Callback<WeatherResult>{
+                override fun onResponse(call: Call<WeatherResult>, response: Response<WeatherResult>) {
                     if (response.isSuccessful){
                         val result = response.body()
-                        val main = result?.get("main")?.asJsonObject
+
+                        /*val main = result?.get("main")?.asJsonObject
                         val temp = main?.get("temp")?.asDouble
                         val cityName = result?.get("name")?.asString
 
                         val weather = result?.get("weather")?.asJsonArray
                         val icon = weather?.get(0)?.asJsonObject?.get("icon")?.asString
+*/
+                        Picasso.get().load("https://openweathermap.org/img/w/${result?.weather?.get(0)?.icon}.png").into(imageWeather)
 
-                        Picasso.get().load("https://openweathermap.org/img/w/$icon.png").into(imageWeather)
-
-                        val c = (temp!! - (32.0))!! * 5.0 / 9.0;
-                        tvTemperature.text = "$temp °C"
-                        tvCityName.text = cityName
+                        //  val c = (temp!! - (32.0))!! * 5.0 / 9.0;
+                        tvTemperature.text = "${result?.main?.temp} °C"
+                        tvCityName.text = result?.name
 
                         layoutWeather.visibility = View.VISIBLE
                     }
                 }
 
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                override fun onFailure(call: Call<WeatherResult>, t: Throwable) {
                     Toast.makeText(applicationContext, "Erreur serveur", Toast.LENGTH_SHORT).show()
                 }
 
@@ -79,8 +92,5 @@ class MainActivity : AppCompatActivity() {
         }catch (ex: Exception){
             Toast.makeText(applicationContext, "Erreur ", Toast.LENGTH_SHORT)
         }
-
-
-
     }
 }
