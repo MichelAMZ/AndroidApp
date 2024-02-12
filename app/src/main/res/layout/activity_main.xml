@@ -34,16 +34,17 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutWeather"
-        android:layout_width="445dp"
-        android:layout_height="523dp"
+        android:layout_width="452dp"
+        android:layout_height="382dp"
         android:layout_marginTop="32dp"
         android:orientation="horizontal"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextCity"
-        app:layout_constraintVertical_bias="0.504">
+        app:layout_constraintVertical_bias="0.024">
 
         <ImageView
             android:id="@+id/imageViewWeather"
@@ -107,5 +108,15 @@
         app:layout_constraintStart_toEndOf="@+id/editTextTextCity"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_send_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Email"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutWeather" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
