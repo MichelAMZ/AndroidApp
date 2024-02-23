@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.rest_api.model
 
 data class WeatherResult (
     var name: String,

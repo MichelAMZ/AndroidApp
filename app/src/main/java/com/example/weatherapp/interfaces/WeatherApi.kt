@@ -1,11 +1,11 @@
-package com.example.weatherapp
+package com.example.weatherapp.interfaces
 
-import com.google.gson.JsonObject
+import com.example.weatherapp.rest_api.model.WeatherResult
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherService {
+interface WeatherApi {
 
     companion object{
         const val APIKEY = "2a17e5fea9e6c8669d46d35368112499"

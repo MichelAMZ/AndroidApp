@@ -10,7 +10,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weatherapp.activities.mysql_webserviceActivity
 import com.example.weatherapp.email.SendMail
+import com.example.weatherapp.rest_api.model.WeatherResult
+import com.example.weatherapp.interfaces.WeatherApi
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,12 +25,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     lateinit var editCityText : EditText
-    lateinit var btnSearch : Button
-    lateinit var btnSendMail : Button
+
     lateinit var imageWeather: ImageView
+
     lateinit var tvTemperature: TextView
     lateinit var tvCityName: TextView
+
     lateinit var layoutWeather: LinearLayout
+
+    lateinit var btnSearch : Button
+    lateinit var btnSendMail : Button
+    lateinit var btnSendUserWS : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +44,18 @@ class MainActivity : AppCompatActivity() {
         editCityText = findViewById(R.id.editTextTextCity)
         btnSearch = findViewById(R.id.buttonSearch)
         btnSendMail = findViewById(R.id.button_send_mail)
+        btnSendUserWS =  findViewById(R.id.button_user_webservice)
         imageWeather = findViewById(R.id.imageViewWeather)
         tvTemperature = findViewById(R.id.textView_Degre)
         tvCityName = findViewById(R.id.textViewCity)
         layoutWeather = findViewById(R.id.linearLayoutWeather)
 
+        val city = "Toulouse"
+        getWeatherByCity(city)
+
         btnSearch.setOnClickListener{
-            val city = editCityText.text.toString()
+            var city = editCityText.text.toString()
+
             if (city.isEmpty()){
                 Toast.makeText(this, "City's nam can't be empty !", Toast.LENGTH_SHORT).show()
             }else{
@@ -55,7 +68,11 @@ class MainActivity : AppCompatActivity() {
        // }
 
         btnSendMail.setOnClickListener( {
-                startActivity(Intent(this@MainActivity, SendMail::class.java))
+           startActivity(Intent(this@MainActivity, SendMail::class.java))
+        })
+
+        btnSendUserWS.setOnClickListener( {
+            startActivity(Intent(this@MainActivity, mysql_webserviceActivity::class.java))
         })
     }
 
@@ -66,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val weatherService = retrofit.create(WeatherService::class.java)
+        val weatherService = retrofit.create(WeatherApi::class.java)
         try {
             // TODO2: call weather api
             val result = weatherService.getWeatherByCity(cityName)
